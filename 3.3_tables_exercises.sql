@@ -15,8 +15,12 @@ describe employees;
 show create table departments;
 describe departments;
 
--- 9. employees table holds employee num and departments table holds department number, and dept_manager shows which employee is in which department
+-- 9. employees table holds employee num and departments table holds department number, and dept_emp shows which employee is in which department
 
 -- explore the dept_manager db
 show create table dept_manager;
 describe dept_manager;
+
+-- explore dept_emp db
+show create table dept_emp;
+describe dept_emp;
