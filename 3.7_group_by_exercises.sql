@@ -20,6 +20,7 @@ group by last_name;
 
 -- add count and use order by to find most unusual name shared with others
 select last_name, count(last_name) from employees
+where last_name like '%q%' and last_name not like '%qu%'
 group by last_name
 order by count(last_name) desc;
 
@@ -45,3 +46,8 @@ group by username
 order by count(username) desc; 
 
 -- bonus: how many duplicates?
+select count(*) from
+(select lower(concat(substr(first_name,1,1), substr(last_name, 1,4), "_", substr(birth_date,6,2), substr(birth_date,3,2))) as username, count(*) as username_count
+from employees
+group by username having username_count>1) as total_count;
+
