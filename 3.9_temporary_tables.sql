@@ -62,7 +62,6 @@ join employees.departments using (dept_no);
 
 select salary
 where (select avg(salary) from salaries
-		
 		)
 
 select * from salary_by_department;
