@@ -60,6 +60,8 @@ from employees.salaries;
 
 select * from avg_salary;
 
+select * from avg_salary_by_department;
+
 create temporary table avg_salary_by_dept_diff
 select dept_name, avg(salary) - (select avg(salary) from employees.salaries) as sal_diff 
 from employees.salaries
@@ -67,10 +69,23 @@ join employees.dept_emp using (emp_no)
 join employees.departments using (dept_no)
 group by dept_name;
 
-select * from avg_salary_by_dept_diff;
+select * from avg_salary_by_dept_diff; 
 
 alter table avg_salary_by_dept_diff add z_score float;
 
 select std(sal_diff) from avg_salary_by_dept_diff;
+select sal_diff from avg_salary_by_dept_diff;
 
+update avg_salary_by_dept_diff
+set z_score = sal_diff / std(sal_diff);
+
+create temporary table avg_salary_by_dept_zscore7
+select dept_name, (avg(salary) - (select avg(salary) from employees.salaries where to_date="9999-01-01")) / (select std(salary) from employees.salaries where to_date="9999-01-01") as z_score 
+from employees.salaries
+join employees.dept_emp using (emp_no)
+join employees.departments using (dept_no)
+where salaries.to_date="9999-01-01" and dept_emp.to_date ="9999-01-01"
+group by dept_name;
+
+select * from avg_salary_by_dept_zscore7;
 
