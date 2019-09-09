@@ -253,6 +253,89 @@ on fc.film_id = i.film_id
 join category as c
 on c.category_id = fc.category_id
 group by c.name
-order by total_purchase
+order by total_purchase desc
 limit 5;
 
+-- 1a. select all columns the actor table
+select * from actor;
+
+-- 1b. select only last name column from actor table
+select last_name from actor;
+
+-- 1c. select only the following colums from the film table
+select * from film;
+
+-- 2a. Select all distinct (different) last names from the actor table.
+select distinct last_name from actor;
+
+-- 2b. Select all distinct (different) postal codes from the address table.
+select distinct postal_code from address;
+
+-- 2c. Select all distinct (different) ratings from the film table. 
+select distinct rating from film;
+
+-- 3a. Select the title, description, rating, movie length columns from the films table that last 3 hours or longer.
+select title, description, rating, length from film
+where length > 180;
+
+-- 3b. Select the payment id, amount, and payment date columns from the payments table for payments made on or after 05/27/2005.
+select payment_id, amount, payment_date from payment
+where payment_date >= '2005-05-27';
+
+-- 3c. Select the primary key, amount, and payment date columns from the payment table for payments made on 05/27/2005.
+select payment_id, amount, payment_date from payment
+where payment_date >= '2005-05-27';
+
+-- 3d. Select all columns from the customer table for rows that have a last names beginning with S and a first names ending with N.
+select * from customer
+where last_name like 's%' and first_name like 'n%';
+
+-- 3e. Select all columns from the customer table for rows where the customer is inactive or has a last name beginning with "M".
+select * from customer 
+where last_name like 'm%' or active = 0
+order by active;
+
+-- 3f. Select all columns from the category table for rows where the primary key is greater than 4 and the name field begins with either C, S or T.
+select * from category
+where category_id > 4 and (name like 'C%' or name like 'S%' or name like 't%');
+
+-- 3g. Select all columns minus the password column from the staff table for rows that contain a password.
+select * from staff
+where isnull(password);
+
+-- 3h. Select all columns minus the password column from the staff table for rows that do not contain a password.
+select * from staff
+where not isnull(password);
+
+-- 4a. Select the phone and district columns from the address table for addresses in California, England, Taipei, or West Java.
+select phone, district from address
+where district in ('California', 'England', 'Taipei', 'West Java');
+
+-- 4b. Select the payment id, amount, and payment date columns from the payment table for payments made on 05/25/2005, 05/27/2005, and 05/29/2005. (Use the IN operator and the DATE function, instead of the AND operator as in previous exercises.)
+select payment_id, amount, payment_date from payment
+where date(payment_date) in ('2005-05-25', '2005-05-27', '2005-05-29');
+
+-- 4c. Select all columns from the film table for films rated G, PG-13 or NC-17.
+select * from film
+where rating in ('g','pg-13','nc-17');
+
+-- 5a. Select all columns from the payment table for payments made between midnight 05/25/2005 and 1 second before midnight 05/26/2005.
+select * from payment
+where payment_date between '2005-05-25 00:00:0' and '2005-05-26 23:59:59';
+
+-- 5b. Select the following columns from the film table for films where the length of the description is between 100 and 120.
+select * from film
+where length(description) between 100 and 120;
+
+-- Hint: total_rental_cost = rental_duration * rental_rate
+
+-- 6a. Select the following columns from the film table for rows where the description begins with "A Thoughtful".
+select * from film
+where description like 'a thoughtful%';
+-- 6b. Select the following columns from the film table for rows where the description ends with the word "Boat".
+select * from film
+where description like '%boat';
+
+-- 6c. Select the following columns from the film table where the description contains the word "Database" and the length of the film is greater than 3 hours.
+select * from film
+where description like '%database%' and length > 180;
