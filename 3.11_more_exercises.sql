@@ -114,3 +114,104 @@ where lifeexpectancy < 60;
 
 -- bonus. what state is city x located, where x is austin
 select * from city;
+
+select name, district 
+from city
+where name = 'Austin';
+
+-- bonus. what region of world is city x located in, where x is austin
+select * from city;
+select * from country;
+
+select ci.name, co.region
+from city as ci
+join country as co
+on ci.countrycode = co.code
+where ci.name = 'Austin';
+
+-- bonus. what is life expentancy in city x, where x is Austin
+select ci.name, co.region, co.lifeexpectancy
+from city as ci
+join country as co
+on ci.countrycode = co.code
+where ci.name = 'Austin';
+
+-- s10. use join to find total rung by each staff member in august 2005
+select * from staff;
+select * from payment;
+
+select sum(amount), s.first_name, s.last_name
+from payment as p
+join staff as s
+on s.staff_id = p.staff_id
+where payment_date like '2005-08%'
+group by s.staff_id;
+
+-- s11. list each film and the number of actors with that film
+select * from film;
+select * from film_actor;
+
+select f.title, count(fa.actor_id) as num_act
+from film_actor as fa
+right join film as f
+on f.film_id = fa.film_id
+group by f.title
+order by num_act desc;
+
+-- s14. use subqueries to display all actors who appear in alone trip
+use sakila;
+
+select * from actor;
+select * from film;
+select * from film_actor;
+
+select a.first_name, a. last_name,f.title
+	from film_actor as fa
+	join film as f
+	on f.film_id = fa.film_id
+	join actor as a
+	on a.actor_id = fa.actor_id
+	where f.film_id =
+		(select film_id
+		from film
+		where title = "alone trip");
+
+-- s15. get all the names and email addresses of candian customers
+select * from address;
+select * from country;
+select * from city;
+select * from customer;
+
+select c.first_name, c.last_name, c.email, country
+from customer as c
+join address as a
+on a.address_id = c.address_id
+join city as ci
+on ci.city_id = a.city_id
+join country as co
+on co.country_id = ci.country_id
+where co.country = 'Canada';
+
+-- s16. identify family films
+select * from film;
+select * from film_category;
+select * from category;
+
+select f.title, c.name
+from film_category as fc
+join category as c
+on c.category_id = fc.category_id
+join film as f
+on f.film_id = fc.film_id
+where name = 'family';
+
+-- s17. how much business in dollars did each store bring in
+select * from payment;
+select * from store;
+select * from staff;
+
+select sum(amount), s.staff_id
+from payment as p
+join staff as s
+on s.staff_id = p.staff_id
+group by s.staff_id;
