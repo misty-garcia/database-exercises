@@ -182,7 +182,7 @@ select * from country;
 select * from city;
 select * from customer;
 
-select c.first_name, c.last_name, c.email, country
+select c.first_name, c.last_name, c.email, co.country
 from customer as c
 join address as a
 on a.address_id = c.address_id
@@ -207,11 +207,52 @@ where name = 'family';
 
 -- s17. how much business in dollars did each store bring in
 select * from payment;
-select * from store;
+select * from rental;
+select * from inventory;
+
 select * from staff;
+select * from store;
 
 select sum(amount), s.staff_id
 from payment as p
 join staff as s
 on s.staff_id = p.staff_id
 group by s.staff_id;
+
+-- s18. display each store's id, city, country
+select * from store;
+select * from address;
+select * from city;
+select * from country;
+
+select store_id, ci.city, co.country
+from store as s
+join address as a
+on a.address_id = s.store_id
+join city as ci
+on ci.city_id = a.city_id
+join country as co
+on co.country_id = ci.country_id;
+
+-- s19. list top five genres in gross revenue in desc order
+select * from payment;
+select * from rental;
+select * from inventory;
+select * from film;
+select * from film_category;
+select * from category;
+
+select c.name, sum(p.amount) as total_purchase
+from payment as p
+join rental as r
+on r.rental_id = p.rental_id
+join inventory as i
+on i.inventory_id = r.inventory_id
+join film_category as fc
+on fc.film_id = i.film_id 
+join category as c
+on c.category_id = fc.category_id
+group by c.name
+order by total_purchase
+limit 5;
+
