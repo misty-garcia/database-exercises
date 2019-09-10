@@ -444,8 +444,85 @@ select * from film;
 select * from film_category;
 select * from category;
 
-select * 
+select c.name, count(fc.category_id) 
 from film as f
 join film_category as fc
-on f.film_id = fc.film_id;
+on f.film_id = fc.film_id
+join category as c
+on c.category_id = fc.category_id
+group by fc.category_id;
+
+-- 3. what are the 5 frequently rented films?
+select * from film;
+select * from rental;
+select * from inventory;
+
+select f.title, count(*)
+from rental as r
+join inventory as i
+on i.inventory_id = r.inventory_id
+join film as f
+on f.film_id = i.film_id
+group by f.title
+order by count(*) desc
+limit 5;
+
+-- 4. what are the 4 most profitable films? Hint: total_rental_cost = rental_duration * rental_rate
+select * from film;
+select * from rental;
+select * from inventory;
+select * from payment;
+
+select f.title, sum(p.amount) as total_rent
+from rental as r
+join inventory as i
+on i.inventory_id = r.inventory_id
+join film as f
+on f.film_id = i.film_id
+join payment as p
+on p.rental_id = r.rental_id
+group by f.title
+order by total_rent desc
+limit 5;
+
+-- 5. who is the best customer?
+select * from customer;
+select * from payment;
+
+select concat(c.last_name, ", ", c.first_name) as name, sum(amount) as total
+from payment as p
+join customer as c
+on c.customer_id = p.customer_id
+group by name
+order by total desc
+limit 1;
+
+-- 6. which actors have appeared in teh most films
+select * from film;
+select * from film_actor;
+select * from actor;
+
+select concat(last_name, ", ", first_name) as actor_name, count(*) as total
+from film_actor as fa
+join film as f
+on f.film_id = fa.film_id
+join actor as a
+on a.actor_id = fa.actor_id
+group by a.actor_id
+order by total desc
+limit 5;
+
+-- 7. what are the sales for each store for each month in 2005
+select * from store;
+select * from payment;
+select * from rental;
+
+select month(payment_date) as month, p.staff_id as store_id, sum(amount) as sales 
+from payment as p
+join store as s
+on s.manager_staff_id = p.staff_id
+where payment_date like '2005%'
+group by month(payment_date), p.staff_id;
+
+-- 8. bonus: find the film title, customer name, customer phone number, and customer address for all the outstanding DVDs
 
