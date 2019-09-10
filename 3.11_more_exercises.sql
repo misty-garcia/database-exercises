@@ -2,6 +2,8 @@ use bayes_811;
 
 -- 1. how much do current managers get paid, relative to the average salary for the department
 -- does any manager get paid less than average
+use employees;
+
 select * from employees;
 select * from dept_manager;
 select * from salaries;
@@ -136,6 +138,48 @@ join country as co
 on ci.countrycode = co.code
 where ci.name = 'Austin';
 
+-- s1. display the first and last name of all actors in lower case
+select lower(first_name), lower(last_name)
+from actor;
+
+-- s2. ID number, first name, and last name of an actor, with first name "Joe." write one query
+select actor_id, first_name, last_name from actor
+where first_name = 'joe';
+
+-- S3. Find all actors whose last name contain the letters "gen"
+select * from actor
+where last_name like '%gen%';
+
+-- s4. Find all actors whose last names contain the letters "li". This time, order the rows by last name and first name, in that order
+select * from actor
+where last_name like '%li%'
+order by last_name, first_name;
+
+-- s5. Using IN, display the country_id and country columns for the following countries: Afghanistan, Bangladesh, and China
+select country_id, country from country
+where country in ('afghanistan', 'bangladesh', 'china');
+
+-- s6. list the last names of all the actors, as well as how many actors have that last name
+select last_name, count(*) from actor
+group by last_name;
+
+-- s7. List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
+select last_name, count(*) from actor
+group by last_name
+having count(*) >= 2;
+
+-- s8. You cannot locate the schema of the address table. Which query would you use to re-create it?
+describe address;
+
+-- s9. Use JOIN to display the first and last names, as well as the address, of each staff member
+select * from staff;
+select * from address;
+
+select first_name, last_name, address
+from staff as s
+join address as a
+on a.address_id = s.address_id;
+
 -- s10. use join to find total rung by each staff member in august 2005
 select * from staff;
 select * from payment;
@@ -158,6 +202,28 @@ on f.film_id = fa.film_id
 group by f.title
 order by num_act desc;
 
+-- s12. how many copies of the film Hunchback Impossible exist in the inventory system
+select * from film;
+select * from inventory;
+
+select title, count(*) 
+from film as f
+join inventory as i
+on i.film_id = f.film_id
+where title = 'hunchback impossible';
+
+-- s13. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English
+select * from film;
+select * from language;
+
+select title, language_id
+from film as f
+where language_id in
+	(select language_id
+	from language as l 
+	where name = 'English')
+	and (title like 'k%' or title like 'q%');
+
 -- s14. use subqueries to display all actors who appear in alone trip
 use sakila;
 
@@ -165,7 +231,7 @@ select * from actor;
 select * from film;
 select * from film_actor;
 
-select a.first_name, a. last_name,f.title
+select a.first_name, a.last_name, f.title
 	from film_actor as fa
 	join film as f
 	on f.film_id = fa.film_id
