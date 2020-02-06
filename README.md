@@ -1,3 +1,3 @@
-#This is my first README file. 
-#Hello world.
-#This is for my database exercises.
+## Database Exercises
+
+These are exercises given in class to practice MYSQL.
