@@ -55,16 +55,13 @@ where salary >
 
 
 -- How many current salaries are within 1 standard deviation of the highest salary? (Hint: you can use a built in function to calculate the standard deviation.) What percentage of all salaries is this?
-select count(*) 
+select *
 from employees
 join salaries using (emp_no)
 where salary >  
 	(
-	select stddev(salary)
+	select max(salary) - stddev(salary)
 	from salaries
 	where to_date = '9999-01-01'
 	) and to_date = '9999-01-01';
-
-select stddev(salary)
-from salaries
-where to_date = '9999-01-01';
+	
