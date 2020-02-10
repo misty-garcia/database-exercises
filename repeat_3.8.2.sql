@@ -105,4 +105,5 @@ limit 1;
 
 -- Bonus Find the names of all current employees, their department name, and their current manager's name.
 
+
 -- Bonus Find the highest paid employee in each department.
